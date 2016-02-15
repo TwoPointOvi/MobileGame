@@ -2,6 +2,7 @@ package com.example.MobileGame;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.view.View.OnClickListener;
+import android.widget.TextView;
+import org.w3c.dom.Text;
 
 /**
  * Created by eovill on 15/02/2016.
@@ -21,6 +24,8 @@ public class GameActivity extends Activity {
     View pauseButton;
     View pauseMenu;
 
+    GameSurfaceView gameSurfaceView;
+
     /*
     OnClickListener for the 'Continue' button at the pause menu
     Sets visibilities to assets in the GameActivity
@@ -31,6 +36,7 @@ public class GameActivity extends Activity {
         public void onClick(View v) {
             pauseMenu.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
+            gameSurfaceView.pausedGame = false;
         }
     };
 
@@ -42,6 +48,7 @@ public class GameActivity extends Activity {
 
         @Override
         public void onClick(View v) {
+            gameSurfaceView.thread.setRunning(false);
             GameActivity.this.finish();
 
         }
@@ -57,6 +64,7 @@ public class GameActivity extends Activity {
         public void onClick(View v) {
             pauseButton.setVisibility(View.GONE);
             pauseMenu.setVisibility(View.VISIBLE);
+            gameSurfaceView.pausedGame = true;
 
             // Logic to pause game
         }
@@ -80,6 +88,9 @@ public class GameActivity extends Activity {
         final int heightPixels = dm.heightPixels;
         final int widthPixels = dm.widthPixels;
 
+        gameSurfaceView = new GameSurfaceView(getApplicationContext(), this);
+        relMainGame.addView(gameSurfaceView);
+
         LayoutInflater myInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
         //Adds pause button dynamically
         pauseButton = myInflater.inflate(R.layout.pause, null, false);
@@ -94,8 +105,20 @@ public class GameActivity extends Activity {
         relMainGame.addView(pauseMenu);
         pauseMenu.setVisibility(View.GONE);
         ImageView cont = (ImageView)pauseMenu.findViewById(R.id.imgCont);
+        TextView contText = (TextView)pauseMenu.findViewById(R.id.continueText);
         ImageView mainMenuTo = (ImageView)pauseMenu.findViewById(R.id.imgToMain);
+        TextView mainMenuText = (TextView)pauseMenu.findViewById(R.id.mainMenuText);
+        Typeface customFont = Typeface.createFromAsset(getAssets(), "Starjedi.ttf");
+        contText.setTypeface(customFont);
+        mainMenuText.setTypeface(customFont);
         cont.setOnClickListener(ContinueListener);
         mainMenuTo.setOnClickListener(ToMainMenuListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        pauseButton.setVisibility(View.GONE);
+        pauseMenu.setVisibility(View.VISIBLE);
+        gameSurfaceView.pausedGame = true;
     }
 }
