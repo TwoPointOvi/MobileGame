@@ -88,7 +88,7 @@ public class GameActivity extends Activity {
         final int heightPixels = dm.heightPixels;
         final int widthPixels = dm.widthPixels;
 
-        gameSurfaceView = new GameSurfaceView(getApplicationContext(), this);
+        gameSurfaceView = new GameSurfaceView(getApplicationContext(), this, heightPixels, widthPixels);
         relMainGame.addView(gameSurfaceView);
 
         LayoutInflater myInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
@@ -111,6 +111,7 @@ public class GameActivity extends Activity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), "Starjedi.ttf");
         contText.setTypeface(customFont);
         mainMenuText.setTypeface(customFont);
+
         cont.setOnClickListener(ContinueListener);
         mainMenuTo.setOnClickListener(ToMainMenuListener);
     }
