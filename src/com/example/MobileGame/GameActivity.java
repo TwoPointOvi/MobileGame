@@ -21,7 +21,10 @@ public class GameActivity extends Activity {
     View pauseButton;
     View pauseMenu;
 
-
+    /*
+    OnClickListener for the 'Continue' button at the pause menu
+    Sets visibilities to assets in the GameActivity
+     */
     OnClickListener ContinueListener = new OnClickListener() {
 
         @Override
@@ -31,6 +34,10 @@ public class GameActivity extends Activity {
         }
     };
 
+    /*
+    OnClickListener for the 'Main Menu' button at the pause menu
+    Ends the GameActivity to return to the MainMenuActivity
+     */
     OnClickListener ToMainMenuListener = new OnClickListener() {
 
         @Override
@@ -40,6 +47,10 @@ public class GameActivity extends Activity {
         }
     };
 
+    /*
+    OnClickListener for the 'Pause(II)' button at the pause menu
+    Sets visibilities to assets in the GameActivity
+     */
     OnClickListener PauseClick = new OnClickListener() {
 
         @Override
@@ -51,7 +62,9 @@ public class GameActivity extends Activity {
         }
     };
 
-
+    /*
+    App works properly on Android versions HONEYCOMB (4.0) and after
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,7 +81,7 @@ public class GameActivity extends Activity {
         final int widthPixels = dm.widthPixels;
 
         LayoutInflater myInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
-
+        //Adds pause button dynamically
         pauseButton = myInflater.inflate(R.layout.pause, null, false);
         pauseButton.setX(widthPixels-250);
         pauseButton.setY(0);
@@ -76,7 +89,7 @@ public class GameActivity extends Activity {
         pauseButton.setOnClickListener(PauseClick);
         pauseButton.getLayoutParams().height = 250;
         pauseButton.getLayoutParams().width = 250;
-
+        //Adds the pause menu dynamically
         pauseMenu = myInflater.inflate(R.layout.pause_menu, null, false);
         relMainGame.addView(pauseMenu);
         pauseMenu.setVisibility(View.GONE);
