@@ -87,7 +87,6 @@ public class GameActivity extends Activity {
 
         final int heightPixels = dm.heightPixels;
         final int widthPixels = dm.widthPixels;
-
         gameSurfaceView = new GameSurfaceView(getApplicationContext(), this, heightPixels, widthPixels);
         relMainGame.addView(gameSurfaceView);
 

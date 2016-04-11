@@ -16,8 +16,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public boolean pausedGame;
     public GameActivity gameActivity;
 
-    private Alien alien;
+    private Background background;
 
+    public float shipSpeed;
     private int screenWidth;
     private int screenHeight;
 
@@ -27,11 +28,12 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         gameActivity = game;
         thread = new MainThread(getHolder(), this);
 
-        alien = new Alien(screenWidth/2, screenHeight/2, 70.0f, 70.0f, BitmapFactory.decodeResource(getResources(), R.drawable.boom));
-
+        shipSpeed = screenWidth / 2.f;
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
         pausedGame = false;
+
+        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.game_back), screenWidth, screenHeight, this);
 
         setFocusable(true);
     }
@@ -46,21 +48,13 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         super.draw(canvas);
         if (!pausedGame) {
             if (canvas!=null) {
-                alien.draw(canvas);
+                background.draw(canvas);
             }
         }
     }
 
     public void update(float DELTA_T){
-        alien.update(DELTA_T);
-
-        //TODO: Incomplete Method of Checking collision
-        if (alien.getPos().x < 0 || alien.getPos().x > screenWidth) {
-            alien.getVel().y *= -1;
-        }
-        if (alien.getPos().y < 0 || alien.getPos().y > screenHeight) {
-            alien.getVel().x *= -1;
-        }
+        background.update(DELTA_T);
     }
 
     @Override
