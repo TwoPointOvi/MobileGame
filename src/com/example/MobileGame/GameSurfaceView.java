@@ -25,10 +25,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Background background;
     private Ship ship;
     private BarrierManager barrierManager;
+    private Alien alien;
 
     public float shipSpeed;
-    private int screenWidth;
-    private int screenHeight;
+    public int screenWidth;
+    public int screenHeight;
 
     public GameSurfaceView(Context context, GameActivity game, int screenHeight, int screenWidth) {
         super(context);
@@ -53,6 +54,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         animation.add(BitmapFactory.decodeResource(getResources(), R.drawable.boom4));
         ship.setDestroyedAnimation(animation);
 
+        alien = new Alien(BitmapFactory.decodeResource(getResources(), R.drawable.alien1), -200, -200);
+        alien.setBarrierManager(barrierManager);
+
         setFocusable(true);
     }
 
@@ -75,8 +79,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (!pausedGame) {
             if (canvas!=null) {
                 background.draw(canvas);
-                ship.draw(canvas);
                 barrierManager.draw(canvas);
+                ship.draw(canvas);
+                alien.draw(canvas);
             }
         }
     }
@@ -86,6 +91,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (!ship.death) {
             background.update(DELTA_T);
             barrierManager.update(DELTA_T);
+            alien.update(DELTA_T);
 
             for (int i = 0; i < barrierManager.topWalls.size(); i++) {
                 ArrayList<Point> temp = new ArrayList<Point>(barrierManager.topWalls.get(i).GetArray());

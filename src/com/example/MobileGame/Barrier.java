@@ -42,7 +42,7 @@ public class Barrier {
     }
 
     public void update(float DELTA_T, boolean bol) {
-        if (x <- barrierBitmap.getWidth()) {
+        if (x < -barrierBitmap.getWidth()) {
             if (bol) {
                 if (Math.abs(BM.targetY - BM.dpos) < 50) {
                     doit = true;
