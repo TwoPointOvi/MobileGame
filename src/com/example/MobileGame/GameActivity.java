@@ -206,6 +206,37 @@ public class GameActivity extends Activity {
         gameSurfaceView.pausedGame = true;
     }
 
+    @Override
+    protected void onResume() {
+        if (!backMusic.isPlaying()) {
+            backMusic.start();
+        }
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        if (backMusic.isPlaying()) {
+            backMusic.stop();
+        }
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        if (backMusic.isPlaying()) {
+            backMusic.pause();
+        }
+
+        pauseButton.setVisibility(View.GONE);
+        pauseMenu.setVisibility(View.VISIBLE);
+        gameSurfaceView.pausedGame = true;
+
+        super.onPause();
+    }
+
     public void updateScore() {
         score += 10;
         textScore.setText("Score: " + score);
