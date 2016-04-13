@@ -2,29 +2,71 @@ package com.example.MobileGame;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.view.View.OnClickListener;
 import android.widget.TextView;
-import org.w3c.dom.Text;
 
 /**
  * Created by eovill on 15/02/2016.
  */
 public class GameActivity extends Activity {
 
+    final static int UPDATE_SCORE = 0;
+    final static int DEATH = 1;
+    final static int LOSE = 2;
+
     RelativeLayout relMainGame;
 
     View pauseButton;
     View pauseMenu;
+    View loseDialog;
+
+    MediaPlayer backMusic;
 
     GameSurfaceView gameSurfaceView;
+
+    TextView textScore;
+    public int score = 0;
+
+    final Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == UPDATE_SCORE){
+
+                updateScore();
+            }
+            if (msg.what == DEATH){
+                postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Message msg = handler.obtainMessage();
+                        msg.what = LOSE;
+                        handler.sendMessage(msg);
+
+                    }
+                }, 3000);
+            }
+            if (msg.what == LOSE){
+                lose();
+            }
+
+            super.handleMessage(msg);
+        }
+
+    };
 
     /*
     OnClickListener for the 'Continue' button at the pause menu
@@ -34,6 +76,9 @@ public class GameActivity extends Activity {
 
         @Override
         public void onClick(View v) {
+            if (!backMusic.isPlaying()) {
+                backMusic.start();
+            }
             pauseMenu.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
             gameSurfaceView.pausedGame = false;
@@ -48,9 +93,11 @@ public class GameActivity extends Activity {
 
         @Override
         public void onClick(View v) {
+            if (backMusic.isPlaying()) {
+                backMusic.stop();
+            }
             gameSurfaceView.thread.setRunning(false);
             GameActivity.this.finish();
-
         }
     };
 
@@ -62,6 +109,9 @@ public class GameActivity extends Activity {
 
         @Override
         public void onClick(View v) {
+            if (backMusic.isPlaying()) {
+                backMusic.pause();
+            }
             pauseButton.setVisibility(View.GONE);
             pauseMenu.setVisibility(View.VISIBLE);
             gameSurfaceView.pausedGame = true;
@@ -90,6 +140,18 @@ public class GameActivity extends Activity {
         gameSurfaceView = new GameSurfaceView(getApplicationContext(), this, heightPixels, widthPixels);
         relMainGame.addView(gameSurfaceView);
 
+        RelativeLayout relativeLayout = new RelativeLayout(this);
+        relativeLayout.setBackgroundResource(R.drawable.button);
+        relativeLayout.setGravity(Gravity.CENTER);
+        relMainGame.addView(relativeLayout,400,150);
+        relativeLayout.setX(0);
+        textScore = new TextView(this);
+        Typeface Custom = Typeface.createFromAsset(getAssets(), "Starjedi.ttf");
+        textScore.setTypeface(Custom);
+        textScore.setTextColor(Color.YELLOW);
+        textScore.setText("Score: " + score);
+        relativeLayout.addView(textScore);
+
         LayoutInflater myInflater = (LayoutInflater) getApplicationContext().getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
         //Adds pause button dynamically
         pauseButton = myInflater.inflate(R.layout.pause, null, false);
@@ -113,12 +175,51 @@ public class GameActivity extends Activity {
 
         cont.setOnClickListener(ContinueListener);
         mainMenuTo.setOnClickListener(ToMainMenuListener);
+
+        //Adds lose screen dynamically
+        loseDialog= myInflater.inflate(R.layout.lose, null, false);
+        relMainGame.addView(loseDialog);
+        TextView loseText = (TextView)loseDialog.findViewById(R.id.textLose);
+        TextView mainMenuText2 = (TextView)loseDialog.findViewById(R.id.endMainMenu);
+        loseText.setTypeface(customFont);
+        mainMenuText2.setTypeface(customFont);
+
+        ImageView loseToMain = (ImageView) loseDialog.findViewById(R.id.toMain);
+
+        loseToMain.setOnClickListener(ToMainMenuListener);
+        loseDialog.setVisibility(View.GONE);
+
+        //Loads and plays background music
+        backMusic = MediaPlayer.create(GameActivity.this, R.raw.music);
+        backMusic.setVolume(0.3f, 0.3f);
+        backMusic.setLooping(true);
+        backMusic.start();
     }
 
     @Override
     public void onBackPressed() {
+        if (backMusic.isPlaying()) {
+            backMusic.pause();
+        }
         pauseButton.setVisibility(View.GONE);
         pauseMenu.setVisibility(View.VISIBLE);
         gameSurfaceView.pausedGame = true;
+    }
+
+    public void updateScore() {
+        score += 10;
+        textScore.setText("Score: " + score);
+        MediaPlayer mp = MediaPlayer.create(GameActivity.this, R.raw.bloodsplatters);
+        mp.start();
+    }
+
+    public void lose() {
+        if (backMusic.isPlaying()) {
+            backMusic.stop();
+        }
+
+        gameSurfaceView.pausedGame = true;
+        pauseButton.setVisibility(View.GONE);
+        loseDialog.setVisibility(View.VISIBLE);
     }
 }

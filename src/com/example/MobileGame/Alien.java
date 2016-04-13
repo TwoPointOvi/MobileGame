@@ -66,4 +66,12 @@ public class Alien {
     public void draw(Canvas canvas) {
         canvas.drawBitmap(alienBitmap, x - (alienBitmap.getWidth() / 2), y - (alienBitmap.getHeight() / 2), null);
     }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 }

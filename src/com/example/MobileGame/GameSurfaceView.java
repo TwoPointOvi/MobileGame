@@ -25,7 +25,7 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private Background background;
     private Ship ship;
     private BarrierManager barrierManager;
-    private Alien alien;
+    private ArrayList<Alien> aliens;
 
     public float shipSpeed;
     public int screenWidth;
@@ -54,8 +54,15 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         animation.add(BitmapFactory.decodeResource(getResources(), R.drawable.boom4));
         ship.setDestroyedAnimation(animation);
 
-        alien = new Alien(BitmapFactory.decodeResource(getResources(), R.drawable.alien1), -200, -200);
-        alien.setBarrierManager(barrierManager);
+
+        aliens = new ArrayList<>();
+        Alien alien1 = new Alien(BitmapFactory.decodeResource(getResources(), R.drawable.alien1), -200, -200);
+        alien1.setBarrierManager(barrierManager);
+        Alien alien2 = new Alien(BitmapFactory.decodeResource(getResources(), R.drawable.alien2), -600, -600);
+        alien2.setBarrierManager(barrierManager);
+
+        aliens.add(alien1);
+        aliens.add(alien2);
 
         setFocusable(true);
     }
@@ -81,7 +88,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 background.draw(canvas);
                 barrierManager.draw(canvas);
                 ship.draw(canvas);
-                alien.draw(canvas);
+                for (Alien alien : aliens) {
+                    alien.draw(canvas);
+                }
+                //alien1.draw(canvas);
+                //alien2.draw(canvas);
             }
         }
     }
@@ -91,7 +102,24 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         if (!ship.death) {
             background.update(DELTA_T);
             barrierManager.update(DELTA_T);
-            alien.update(DELTA_T);
+
+            for (Alien alien : aliens) {
+                alien.update(DELTA_T);
+            }
+            //alien1.update(DELTA_T);
+            //alien2.update(DELTA_T);
+            for (Alien alien: aliens) {
+                ArrayList<Point> alienPoint = new ArrayList<Point>(alien.GetArray());
+                if (ship.bump(alienPoint.get(0), alienPoint.get(1), alienPoint.get(2), alienPoint.get(3))) {
+                    alien.setX(-200);
+                    alien.setY(-200);
+                    Message msg = barrierManager.gameSurfaceView.gameActivity.handler.obtainMessage();
+                    msg.what = 0;
+                    barrierManager.gameSurfaceView.gameActivity.handler.sendMessage(msg);
+
+                }
+            }
+
 
             for (int i = 0; i < barrierManager.topWalls.size(); i++) {
                 ArrayList<Point> temp = new ArrayList<Point>(barrierManager.topWalls.get(i).GetArray());
@@ -99,11 +127,11 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 if ((ship.bump(temp.get(0), temp.get(1), temp.get(2), temp.get(3))) ||
                         (ship.bump(temp2.get(0), temp2.get(1), temp2.get(2), temp2.get(3)))) {
                     ship.death = true;
-                    //MediaPlayer mp = MediaPlayer.create(gameActivity, R.raw.boom);
-                    //mp.start();
-                    //Message msg = barrierManager.game_panel.game.handler.obtainMessage();
-                    //msg.what = 1;
-                    //barrierManager.gameSurfaceView.gameActivity.handler.sendMessage(msg);
+                    MediaPlayer mp = MediaPlayer.create(gameActivity, R.raw.blast);
+                    mp.start();
+                    Message msg = barrierManager.gameSurfaceView.gameActivity.handler.obtainMessage();
+                    msg.what = 1;
+                    barrierManager.gameSurfaceView.gameActivity.handler.sendMessage(msg);
                 }
             }
         }

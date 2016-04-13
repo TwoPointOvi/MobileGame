@@ -4,4 +4,6 @@
     <string name="start_game">Start Game</string>
     <string name="main_menu">Main Menu</string>
     <string name="cont">Continue</string>
+    <string name="lose">You lose</string>
+    <integer name="score">10</integer>
 </resources>
