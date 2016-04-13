@@ -125,4 +125,12 @@ public class Ship {
 
     }
 
+    public int getX() {
+        return x + shipBitmap.getWidth();
+    }
+
+    public int getY() {
+        return y + shipBitmap.getHeight() / 2;
+    }
+
 }
