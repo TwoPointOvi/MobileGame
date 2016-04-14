@@ -114,22 +114,25 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             background.update(DELTA_T);
             barrierManager.update(DELTA_T);
 
-            //Check collision between aliens and the ship
+            //Check collision between aliens and the ship and lasers
             for (Alien alien: aliens) {
                 alien.update(DELTA_T);
                 ArrayList<Point> alienPoint = new ArrayList<Point>(alien.GetArray());
 
-                for (Laser laser: lasers) {
-                    laser.update(DELTA_T);
-                    if (laser.bump(alienPoint.get(0), alienPoint.get(1), alienPoint.get(2), alienPoint.get(3))) {
-                        alien.setX(-200);
-                        alien.setY(-200);
-
-                        Message msg = barrierManager.gameSurfaceView.gameActivity.handler.obtainMessage();
-                        msg.what = 0;
-                        barrierManager.gameSurfaceView.gameActivity.handler.sendMessage(msg);
-
-                        //lasers.remove(laser);
+                for (int i = 0; i < lasers.size(); i++) {
+                    Laser laser = lasers.get(i);
+                    if (laser.visible) {
+                        laser.update(DELTA_T);
+                        if (laser.bump(alienPoint.get(0), alienPoint.get(1), alienPoint.get(2), alienPoint.get(3))) {
+                            alien.setX(-200);
+                            alien.setY(-200);
+                            laser.visible = false;
+                            Message msg = barrierManager.gameSurfaceView.gameActivity.handler.obtainMessage();
+                            msg.what = 0;
+                            barrierManager.gameSurfaceView.gameActivity.handler.sendMessage(msg);
+                        }
+                    } else {
+                        lasers.remove(laser);
                     }
                 }
 

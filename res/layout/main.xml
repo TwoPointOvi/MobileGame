@@ -15,6 +15,15 @@
             android:textAllCaps="true"
             android:textSize="100px"/>
 
+    <TextView android:id="@+id/text_highscore"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentTop="true"
+              android:layout_centerHorizontal="true"
+              android:layout_marginBottom="20dp"
+              android:textAllCaps="true"
+              android:textAppearance="?android:attr/textAppearanceMedium"/>
+
     <RelativeLayout
             android:id="@+id/button_start"
             android:layout_width="match_parent"
@@ -39,7 +48,6 @@
                     android:gravity="center_horizontal"
                     android:text="@string/start_game"
                     android:textAppearance="?android:attr/textAppearanceMedium"/>
-
 
     </RelativeLayout>
 

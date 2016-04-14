@@ -14,12 +14,14 @@ public class Laser {
 
     private Bitmap laserBitmap;
     private int x, y;
+    public boolean visible;
     BarrierManager barrierManager;
 
     public Laser(Bitmap bitmap, int x, int y) {
         this.laserBitmap = bitmap;
         this.x = x;
         this.y = y;
+        visible = true;
     }
 
     public void setBarrierManager(BarrierManager barrierManager) {
@@ -100,6 +102,9 @@ public class Laser {
     public void update(float DELTA_T) {
 
         x += barrierManager.gameSurfaceView.shipSpeed * DELTA_T;
+        if (x > barrierManager.gameSurfaceView.getWidth()) {
+            visible = false;
+        }
     }
 
     public void draw(Canvas canvas) {

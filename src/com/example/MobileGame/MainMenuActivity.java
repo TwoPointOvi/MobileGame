@@ -1,7 +1,10 @@
 package com.example.MobileGame;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -18,6 +21,7 @@ public class MainMenuActivity extends Activity {
     ImageView imageButton;
     TextView textView;
     TextView titleView;
+    TextView textHighScore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,16 @@ public class MainMenuActivity extends Activity {
         Typeface customFont = Typeface.createFromAsset(getAssets(), "Starjedi.ttf");
         textView.setTypeface(customFont);
         titleView.setTypeface(customFont);
+
+
+        //Get and draw the high score
+        SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
+        int highScore = prefs.getInt("scoreKey", 0);
+
+        textHighScore = (TextView) findViewById(R.id.text_highscore);
+        textHighScore.setTypeface(customFont);
+        textHighScore.setTextColor(Color.YELLOW);
+        textHighScore.setText("High Score: " + highScore);
 
         button.setOnTouchListener(new TouchButton(imageButton));
 

@@ -2,6 +2,8 @@ package com.example.MobileGame;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
@@ -247,6 +249,15 @@ public class GameActivity extends Activity {
     public void lose() {
         if (backMusic.isPlaying()) {
             backMusic.stop();
+        }
+
+        //Save the score of the game if it was higher than the previous score
+        SharedPreferences preferences = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
+        int highScore = preferences.getInt("scoreKey", 0);
+        if (score > highScore) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("scoreKey", score);
+            editor.commit();
         }
 
         gameSurfaceView.pausedGame = true;
