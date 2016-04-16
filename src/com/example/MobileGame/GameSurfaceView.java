@@ -44,8 +44,8 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         this.screenWidth = screenWidth;
         pausedGame = false;
 
-        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.game_back), screenWidth, screenHeight, this);
-        barrierManager = new BarrierManager(BitmapFactory.decodeResource(getResources(), R.drawable.barier), this);
+        background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.icecave), screenWidth, screenHeight, this);
+        barrierManager = new BarrierManager(BitmapFactory.decodeResource(getResources(), R.drawable.rockpillar), this);
         barrierManager.setScreen(screenWidth, screenHeight);
 
         ship = new Ship(BitmapFactory.decodeResource(getResources(), R.drawable.spaceship), screenWidth, screenHeight);
