@@ -14,6 +14,9 @@ public class Background {
     int countBackground;
     GameSurfaceView gameSurfaceView;
 
+    /*
+    Class constructor
+     */
     public Background(Bitmap bitmap, int screenW, int screenH, GameSurfaceView gameSurfaceView) {
         this.backgroundBitmap = bitmap;
         this.screenWidth = screenW;
@@ -23,6 +26,9 @@ public class Background {
         this.gameSurfaceView = gameSurfaceView;
     }
 
+    /*
+    Draw method
+     */
     public void draw(Canvas canvas) {
         for (int i = 0; i < countBackground+1; i++) {
             if (canvas != null) {
@@ -34,6 +40,9 @@ public class Background {
         }
     }
 
+    /*
+    Update the background
+     */
     public void update(float DELTA_T) {
         x = (int) (x - gameSurfaceView.shipSpeed * DELTA_T);
     }

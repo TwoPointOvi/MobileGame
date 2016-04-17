@@ -18,16 +18,25 @@ public class Barrier {
     BarrierManager BM;
     boolean doit;
 
+    /*
+    Constructor of the class
+     */
     public Barrier(Bitmap barrierBitmap, int x, int y){
         this.barrierBitmap = barrierBitmap;
         this.x = x;
         this.y = y;
     }
 
+    /*
+    Set the barrier manager to manage the spawn of barriers on screen
+     */
     public void setManager(BarrierManager barrierManager) {
         BM = barrierManager;
     }
 
+    /*
+    Get the image bitmap of the object
+     */
     public Bitmap getBitmap() {
         return barrierBitmap;
     }
@@ -65,6 +74,9 @@ public class Barrier {
         x = (int) (x - BM.gameSurfaceView.shipSpeed * DELTA_T);
     }
 
+    /*
+    Get the collision points
+     */
     public ArrayList<Point> GetArray() {
         Point TL = new Point(), TR = new Point(), BL = new Point(), BR = new Point();
         TL.x = x - barrierBitmap.getWidth() / 2;

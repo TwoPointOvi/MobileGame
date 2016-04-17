@@ -142,6 +142,7 @@ public class GameActivity extends Activity {
         gameSurfaceView = new GameSurfaceView(getApplicationContext(), this, heightPixels, widthPixels);
         relMainGame.addView(gameSurfaceView);
 
+        //Make the score view
         RelativeLayout relativeLayout = new RelativeLayout(this);
         relativeLayout.setBackgroundResource(R.drawable.button);
         relativeLayout.setGravity(Gravity.CENTER);
@@ -222,6 +223,9 @@ public class GameActivity extends Activity {
         if (backMusic.isPlaying()) {
             backMusic.stop();
         }
+        pauseButton.setVisibility(View.GONE);
+        pauseMenu.setVisibility(View.VISIBLE);
+        gameSurfaceView.pausedGame = true;
 
         super.onStop();
     }

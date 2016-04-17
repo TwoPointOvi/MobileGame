@@ -58,4 +58,17 @@ public class MainMenuActivity extends Activity {
         });
 
     }
+
+    @Override
+    protected void onResume() {
+        Typeface customFont = Typeface.createFromAsset(getAssets(), "Starjedi.ttf");
+        SharedPreferences prefs = this.getSharedPreferences("myPrefsKey", Context.MODE_PRIVATE);
+        int highScore = prefs.getInt("scoreKey", 0);
+
+        textHighScore = (TextView) findViewById(R.id.text_highscore);
+        textHighScore.setTypeface(customFont);
+        textHighScore.setTextColor(Color.YELLOW);
+        textHighScore.setText("High Score: " + highScore);
+        super.onResume();
+    }
 }

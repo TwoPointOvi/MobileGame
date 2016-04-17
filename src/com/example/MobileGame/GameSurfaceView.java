@@ -33,6 +33,9 @@ public class GameSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public int screenWidth;
     public int screenHeight;
 
+    /*
+    Constructor of the class
+     */
     public GameSurfaceView(Context context, GameActivity game, int screenHeight, int screenWidth) {
         super(context);
         getHolder().addCallback(this);
